@@ -1,0 +1,18 @@
+data<-read.csv("household_power_consumption.txt", sep=";")
+is.na(data)<-data=="?"
+newdata<-data[which(data$Date=="1/2/2007" | data$Date=="2/2/2007"),] 
+newdata$Global_active_power<-as.numeric(as.character(newdata$Global_active_power))
+newdata$Global_reactive_power<-as.numeric(as.character(newdata$Global_reactive_power))
+newdata$Voltage<-as.numeric(as.character(newdata$Voltage))
+newdata$Global_intensity<-as.numeric(as.character(newdata$Global_intensity))
+newdata$dt<-paste(newdata$Date, newdata$Time)
+newdata$dt<-strptime(newdata$dt, "%d/%m/%Y %H:%M:%S")
+newdata$Sub_metering_1<-as.numeric(as.character(newdata$Sub_metering_1))
+newdata$Sub_metering_2<-as.numeric(as.character(newdata$Sub_metering_2))
+newdata$Sub_metering_3<-as.numeric(as.character(newdata$Sub_metering_3))
+png(file = "plot3.png", width = 480, height = 480)
+plot(newdata$dt,newdata$Sub_metering_1, type="l", xlab="", ylab="Energy sub metering")
+lines(newdata$dt, newdata$Sub_metering_2, type="l", col="red")
+lines(newdata$dt, newdata$Sub_metering_3, type="l", col="blue")
+legend("topright", lty=1, col=c("black", "red", "blue"), legend=c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
+dev.off()
